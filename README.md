@@ -1,5 +1,21 @@
 
+
 ## Getting Started
+
+### Prerequisites
+
+- Node.js
+- MongoDB
+- React.js
+- Express
+
+### Clone the Project
+
+To get started, clone this project structure:
+
+```sh
+git clone https://github.com/amul69906995/MERN-Boilerplate.git
+cd MERN-Boilerplate
 
 # Full Stack MERN Boilerplate
 
