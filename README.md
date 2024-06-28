@@ -1,10 +1,18 @@
 
 ## Getting Started
 
+# Full Stack MERN Boilerplate
+
+This is a boilerplate for creating a full stack MERN (MongoDB, Express.js, React, Node.js) application. MongoDB, Express, CORS, and all necessary folders such as models, error handling, middleware, routes, and utilities are configured. The React app is also pre-configured, allowing you to directly clone this repository and start building your MERN stack application.
+
+## Project Structure
+
 ### Prerequisites
 
 - Node.js
 - MongoDB
+- Reactjs
+- Express
 
 ### Backend Setup
 
@@ -39,14 +47,26 @@ The backend server will be running on `http://localhost:8000`.
 
 - The backend server will be running on `http://localhost:8000`
 
-## Contributing
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-branch`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature-branch`)
-5. Open a pull request
+### Frontend Setup
 
-## License
+1. Navigate to the frontend directory:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+    ```sh
+    cd frontend
+    ```
+
+2. Install dependencies:
+
+    ```sh
+    npm install
+    ```
+
+3. Start the frontend development server:
+
+    ```sh
+    npm start
+    ```
+
+The frontend server will be running on `http://localhost:5173`.
+
