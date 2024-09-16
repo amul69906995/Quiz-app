@@ -2,10 +2,9 @@ const express = require('express')
 const app = express()
 require('dotenv').config()
 const userRoutes=require('./routes/userRoutes')
-const bookRoutes=require('./routes/bookRoutes')
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
-
+const quizRoutes=require('./routes/quizRoutes.js')
 //parser
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -37,17 +36,17 @@ app.use(cors({
 
 app.use(morgan('tiny'))
 
-app.use('/user',userRoutes)
-app.use('/books',bookRoutes)
 
+app.use('/user',userRoutes)
+app.use('/quiz',quizRoutes)
 //error
 app.use((err, req, res, next) => {
   const { message = "something went wrong/default message to debug u have to dig dipper", statusCode = 500 } = err
   console.log("**********error**************")
   console.log("**********error**************")
+  console.log(err)
   console.log("**********error**************")
   res.status(statusCode).json({ message })
 })
 
-
-app.listen(process.env.port, () => { console.log(`server started on port ${process.env.port}`) })
+app.listen(process.env.PORT||3003, () => { console.log(`server started on port ${process.env.PORT}`) })

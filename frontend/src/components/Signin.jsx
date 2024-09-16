@@ -1,43 +1,68 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { toastifyOption } from '../constant';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import './signin.css'; // Ensure this import is present to apply CSS styles
 
 const Admin = () => {
-  const [showPassword, setShowPassword] = useState(true)
-  const [password, setPassword] = useState('')
-  const [email, setEmail] = useState('')
+  const [showPassword, setShowPassword] = useState(true);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [onLoading, setOnLoading] = useState(false);
+
   const handleSendLink = async () => {
-    setOnLoading(true)
-    console.log("backend url",import.meta.env.VITE_BACKEND_URL)
+    setOnLoading(true);
     try {
-      const result = await axios.post(`${import.meta.env.VITE_BACKEND_URL}:8000/user/sign-in`, { email, password })
-      console.log(result)
-      toast.success(result.data.message,toastifyOption);
+      const result = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/sign-in`, { email, password });
+      toast.success(result.data.message, toastifyOption);
+    } catch (e) {
+      toast.error(e.response.data.message, toastifyOption);
     }
-    catch (e) {
-      console.log(e.response.data.message)
-      toast.error(e.response.data.message,toastifyOption);
-    }
-    setOnLoading(false)
-  }
+    setOnLoading(false);
+  };
+
   return (
-    <>
-      <h2>
-        admin
-      </h2>
-      <h3>testing email:amul123@gmail.com and password:amul123@gmail.com </h3>
-      <div>
-        <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-        <input type={showPassword ? 'password' : 'text'} placeholder='password' onChange={(e) => setPassword(e.target.value)} />
-        <button onClick={() => setShowPassword(!showPassword)}>{showPassword ? "Text Form" : "password Form"}</button>
-        <button onClick={handleSendLink} disabled={onLoading}>send Link</button>
-        <Link to='/login'><button>Login</button></Link>
+    <div className="admin-container">
+      <h1 className="admin-title">Sign In</h1>
+      <div className="admin-field">
+        <label htmlFor="email" className="admin-label">Email</label>
+        <input
+          type="text"
+          id="email"
+          placeholder="email"
+          onChange={(e) => setEmail(e.target.value)}
+          className="admin-input"
+        />
       </div>
-    </>
-  )
-}
+      <div className="admin-field">
+        <label htmlFor="password" className="admin-label">Password</label>
+        <input
+          type={showPassword ? 'password' : 'text'}
+          id="password"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+          className="admin-input"
+        />
+        <button
+          onClick={() => setShowPassword(!showPassword)}
+          className="admin-toggle-button"
+        >
+          {showPassword ? "Text Form" : "Password Form"}
+        </button>
+      </div>
+      <button
+        onClick={handleSendLink}
+        disabled={onLoading}
+        className="admin-submit-button"
+      >
+        Send Link
+      </button>
+      <Link to='/' className="admin-link">
+        <button className="admin-login-button">Login</button>
+      </Link>
+    </div>
+  );
+};
 
 export default Admin;

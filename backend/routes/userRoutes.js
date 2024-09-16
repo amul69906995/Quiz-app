@@ -6,6 +6,8 @@ const User = require('../models/user.js')
 const validateUserSchema = require('../utils/validateUserSchema.js')
 const jwt = require('jsonwebtoken')
 const sendVerificationEmail = require('../utils/sendVerificationEmail.js')
+const validateUser = require('../middlewares/validateUser.js')
+require('dotenv').config()
 
 
 
@@ -18,7 +20,7 @@ router.post('/sign-in', catchAsync(async (req, res, next) => {
     const user = new User({ email, password })
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
     const verifyUrl = `${process.env.FRONTEND_URL}/emailverification/?token=${jwtToken}`
-    await sendVerificationEmail(verifyUrl)
+    await sendVerificationEmail(verifyUrl,email)
     await user.save()
     // res.json({ jwtToken, verifyUrl })
     res.json({ "message": "please verify you email then login" })
@@ -34,8 +36,8 @@ router.post('/log-in', catchAsync(async (req, res, next) => {
         if (!isPasswordCorrect) throw new appError("password is incorrect", 400)
         if (!user.isVerified) throw new appError("user is not verified", 400)
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
-        res.cookie('jwtToken', token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true })
-        res.json({ "message": "login successfully", jwtToken, user })
+        res.cookie('jwtToken', token, { maxAge: 24 * 60 * 60 * 1000,sameSite: 'none', secure: true })
+        res.json({ "message": "login successfully", token , user })
     }
     const { jwtToken } = req.cookies;
     if (jwtToken) {
@@ -64,11 +66,18 @@ router.post('/verify-user', catchAsync(async (req, res, next) => {
     await user.save()
     res.json({ message: "user is verified", user })
 }))
-
-
-
-
-
+router.post('/auto-login',catchAsync(async(req,res)=>{
+    const { jwtToken } = req.body;
+    //console.log(jwtToken)
+    if (!jwtToken) throw new appError("jwtToken is missing")
+    const data = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    if (!data) throw new appError("token is invalid", 400)
+    const user = await User.findById(data.id)
+    if(!user)throw new appError("user not found",400)
+    if(!user.isVerified)throw new appError("you need to verify your account")
+    res.json(user)
+  
+}))
 
 
 module.exports = router;
