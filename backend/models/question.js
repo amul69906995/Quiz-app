@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
+const User=require('./user.js')
 
-const questionSchema = useState({
+const questionSchema =new mongoose.Schema({
     owner:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    },
-    type: {
-        type: String,
-        required: true,
-        trim: true,
+        ref:User,
+        required:true,
     },
     difficulty: {
         type: String,
@@ -35,10 +32,7 @@ const questionSchema = useState({
             type: [String],
             required: true,
             trim:true,
-            validate: [arrayLimit, '{PATH} exceeds the limit of 3'],
-        }
+      }
 })
-const arrayLimit=(val)=>{
-    return val.length === 3;
-}
+
 module.exports = mongoose.model("Question", questionSchema)

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const scoreSchema = useState({
+const scoreSchema =new mongoose.Schema({
     owner:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
@@ -9,17 +9,19 @@ const scoreSchema = useState({
         required: true,
         trim: true,
     },
-    incorrectQuestion: {
+    attemptedQuestion: {
         type: Number,
         required: true,
         trim: true,
     },
-    umattemptedQuestion:{
+    unattemptedQuestion:{
         type: Number,
         required: true,
         trim: true,
     }
-   
-})
+  
+},{
+    timestamps: true
+});
 
-module.exports = mongoose.model("Question", questionSchema)
+module.exports = mongoose.model("Score", scoreSchema)

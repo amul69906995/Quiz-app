@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './home.css'; // Import the CSS file
 import axios from 'axios';
-
+import {useNavigate} from 'react-router-dom';
+import { questionContext } from '../context/QuestionProvider';
 const Home = () => {
   const [level, setLevel] = useState('easy');
   const [subject, setSubject] = useState('');
   const [numQuestion, setNumQuestion] = useState('');
   const [errors, setErrors] = useState({ subject: '', numQuestion: '' });
-
+  const navigate=useNavigate();
+  const {setQuestion}=useContext(questionContext);
   const handleStartQuiz = () => {
     let errorMessages = { subject: '', numQuestion: '' };
     let hasErrors = false;
@@ -29,6 +31,7 @@ const Home = () => {
       setErrors({ subject: '', numQuestion: '' });
       // Call API to start quiz
       startQuiz();
+       navigate('/protected/quiz')
     }
   };
   const startQuiz = async () => {
@@ -37,7 +40,7 @@ const Home = () => {
         withCredentials: true
       })
      console.log(data)
-     Navigate('/protected/quiz')
+     setQuestion(data)
     } catch (error) {
       console.log(error);
     }
